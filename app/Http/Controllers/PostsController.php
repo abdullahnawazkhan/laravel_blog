@@ -6,6 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 
 class PostsController extends Controller {
+    public function __construct() {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -67,7 +71,11 @@ class PostsController extends Controller {
     public function edit($id) {
         $post = Post::find($id);
 
-        return view('posts.edit')->with('post', $post);
+        if ($post->user_id == auth()->user()->id) {
+            return view('posts.edit')->with('post', $post);
+        }
+
+        return redirect('/posts')->with("error", 'Unauthorized Page');
     }
 
     /**
@@ -100,8 +108,22 @@ class PostsController extends Controller {
      */
     public function destroy($id) {
         $post = Post::find($id);
-        $post->delete();
 
-        return redirect('/posts')->with('success', 'Post Deleted');
+        
+        
+        // checking if logged in user has made this post
+        if ($post->user_id == auth()->user()->id) {
+            $post->delete();
+            return Response()->json([
+                'response' => '200',
+                'message' => 'Post Deleted'
+            ]);
+            // return redirect('/posts')->with('success', 'Post Deleted');
+        }
+        
+        return Response()->json([
+            'response' => '400',
+            'message' => 'Deletion Error'
+        ]);
     }
 }
