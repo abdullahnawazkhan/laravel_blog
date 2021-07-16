@@ -22,7 +22,7 @@
 <body>
     @include('inc.navbar')
 
-    <div class="container">
+    <div class="container px-2 py-2">
         @include('inc.messages')
         @yield('content')
     </div>

@@ -26,10 +26,6 @@
 				<li class='nav-item'>
 					<a class='nav-link' href="/posts">Posts</a>
 				</li>
-
-				<li>
-					<a class='nav-link' href="/posts/create">Create New Post</a>
-				</li>
 			</ul>
 
 			<!-- Right Side Of Navbar -->
